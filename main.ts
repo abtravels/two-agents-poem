@@ -17,5 +17,18 @@ const poem = [
   "together.",
 ].join("\n");
 
+const output = poem + "\n";
+
+// The bounty requires entry.txt to hold 1-280 Unicode code points.
+// Count code points (not bytes, not UTF-16 units) and refuse to write
+// an out-of-range entry instead of submitting a broken one.
+const codePoints = [...output].length;
+if (codePoints < 1 || codePoints > 280) {
+  console.error(
+    `entry.txt must be 1-280 Unicode code points, got ${codePoints}; refusing to write`,
+  );
+  process.exit(1);
+}
+
 mkdirSync("/output", { recursive: true });
-writeFileSync("/output/entry.txt", poem + "\n", "utf8");
+writeFileSync("/output/entry.txt", output, "utf8");
